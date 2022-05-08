@@ -1,1 +1,1 @@
-* * * * * docker
+* * * * * docker run --name airprtmonitor -v ~/AirportWaits/data:/app/data airportcontainer && docker rm airprtmonitor
