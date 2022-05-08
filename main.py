@@ -23,22 +23,23 @@ def retrieve_wait_times(request_content: str) -> pd.DataFrame:
     data = pd.DataFrame(data)
     return data
 
-def index_by_datetime(df: pd.DataFrame, outdir: str = "./data/") -> pd.DataFrame:
+def index_by_datetime(df: pd.DataFrame, outdir: str = "./data/") -> None:
     if not os.path.exists(outdir):
         os.mkdir(outdir)
     
     current_date = datetime.now().strftime("%y-%m-%d-%H:%M:%S")
+    path = path = os.path.join(outdir, "YYZ.csv")
+
+    new_df = pd.DataFrame({a:[b] for _, (a,b) in df.iterrows()})
+    new_df.index = pd.DatetimeIndex(data=[datetime.now()])
+
+    if os.path.exists(path):
+        out_df = pd.read_csv(path, index_col=0)
+        out_df = pd.concat([out_df,new_df])
+    else:
+        out_df = new_df
     
-    for _, (key,val) in df.iterrows():
-        path = os.path.join(outdir, key+".csv")
-        if os.path.exists(path):
-            out_df = pd.read_csv(path)
-        else:
-            out_df = pd.DataFrame({})
-        
-        out_df[current_date] = [val]
-        print(out_df)
-        out_df.to_csv(path,index=False)
+    out_df.to_csv(path)
 
 
 if __name__ == "__main__":
