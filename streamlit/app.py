@@ -19,7 +19,7 @@ def parse_timestamps(time_string: str) -> int:
 @st.cache
 def get_data(path: str = "../data/YYZ.csv"):
     source = pd.read_csv(path, index_col=0)
-    source = source.applymap(parse_timestamps) 
+    source = source.fillna(source.mode().iloc[0]).applymap(parse_timestamps) 
     source = source.reset_index()
     source["date"] = source["index"]
     source = source.drop("index", axis=1)
